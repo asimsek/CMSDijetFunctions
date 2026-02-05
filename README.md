@@ -151,7 +151,11 @@ git fetch --depth 1 cmsdijetfunctions main
 
 ```bash
 FILES=(
-  'config/*.config'
+  'config/dijet.config'
+  'config/dijet_*param.config'
+  'config/dijet_Atlas*.config'
+  'config/dijet_ModExp*.config'
+  'config/ModDijet_*param.config'
 )
 
 git restore --source=cmsdijetfunctions/main --worktree -- "${FILES[@]}"
@@ -164,6 +168,85 @@ git restore --source=cmsdijetfunctions/main --worktree -- "${FILES[@]}"
 git remote remove cmsdijetfunctions 2>/dev/null || true
 git remote -v
 ```
+
+> [!WARNING]
+> You need to update some files for the `Python 3` compatibility!
+
+
+**Update `rootTools/__init__.py`**
+
+```bash
+cat > $CMSSW_BASE/src/CMSDIJET/DijetRootTreeAnalyzer/python/rootTools/__init__.py <<'EOF'
+from . import RootIterator, RootFile, Utils, tdrstyle, CMS_lumi
+__all__ = ["RootIterator", "RootFile", "Utils", "tdrstyle", "CMS_lumi"]
+EOF
+```
+
+**Update `ramework/__init__.py`**
+
+```bash
+cat > $CMSSW_BASE/src/CMSDIJET/DijetRootTreeAnalyzer/python/framework/__init__.py <<'EOF'
+import ROOT as rt
+
+rt.gSystem.Load('$CMSSW_BASE/lib/$SCRAM_ARCH/libHiggsAnalysisCombinedLimit')
+from . import Config, Drawer
+__all__ = ["Config", "Drawer"]
+EOF
+```
+
+**Update `python/framework/Config.py`**
+
+
+```bash
+sed -i 's/^import ConfigParser, os$/import configparser, os/; s/self\.config = ConfigParser\.ConfigParser()/self.config = configparser.ConfigParser()/g' python/framework/Config.py
+```
+
+**Update `python/BinnedFit.py`**
+
+```bash
+sed -i 's/^import rootTools$/from rootTools import RootIterator, Utils/; s/\<rootTools\.Utils\./Utils./g; s/\<rootTools\.RootIterator\./RootIterator./g' python/BinnedFit.py
+```
+
+**Update `python/WriteDataCard.py`**
+
+```bash
+sed -i 's/^import rootTools$/from rootTools import RootIterator, Utils/; s/\<rootTools\.Utils\./Utils./g; s/\<rootTools\.RootIterator\./RootIterator./g' python/WriteDataCard.py
+```
+
+**Update `python/rootTools/RootIterator.py`**
+
+```bash
+cat > $CMSSW_BASE/src/CMSDIJET/DijetRootTreeAnalyzer/python/rootTools/RootIterator.py <<'EOF'
+import ROOT as rt
+
+class RootIterator:
+    def __init__(self, o):
+        if hasattr(o, "Class") and o.Class().InheritsFrom("TIterator"):
+            self._it = o
+        elif hasattr(o, "createIterator"):
+            self._it = o.createIterator()
+        elif hasattr(o, "MakeIterator"):
+            self._it = o.MakeIterator()
+        elif hasattr(o, "componentIterator"):
+            self._it = o.componentIterator()
+        else:
+            raise TypeError(
+                f"Object of type {type(o).__name__} does not provide a ROOT iterator"
+            )
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        n = self._it.Next()
+        if not n:  # None or null pointer
+            raise StopIteration
+        return n
+
+    next = __next__
+EOF
+```
+
 
 
 
