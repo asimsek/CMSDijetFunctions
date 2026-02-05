@@ -116,7 +116,7 @@ git remote -v
 
 #### Rebuild
 
-```
+```bash
 cd $CMSSW_BASE/src/HiggsAnalysis/CombinedLimit
 
 scramv1 b clean; scramv1 b -j$(nproc --ignore=2)
@@ -126,10 +126,44 @@ scramv1 b clean; scramv1 b -j$(nproc --ignore=2)
 ---
 
 > [!TIP]
-> Find the `.config` files in this GitHub repository<br>
+> You can find the `.config` files under the `config` folder in this repository.<br>
 > https://github.com/asimsek/CMSDijetFunctions
 
 
+### Setup CMS Dijet Analyzer and Update `.config` Files:
+
+```bash
+cd $CMSSW_BASE/src/
+
+git clone -b Run3_150X https://github.com/CMSDIJET/DijetRootTreeAnalyzer.git CMSDIJET/DijetRootTreeAnalyzer
+cd CMSDIJET/DijetRootTreeAnalyzer
+```
+
+
+**Pull the `config` files:**
+
+```bash
+git remote add cmsdijetfunctions https://github.com/asimsek/CMSDijetFunctions.git 2>/dev/null || true
+git remote -v
+git fetch --depth 1 cmsdijetfunctions main
+```
+
+
+```bash
+FILES=(
+  'config/*.config'
+)
+
+git restore --source=cmsdijetfunctions/main --worktree -- "${FILES[@]}"
+```
+
+
+**Remove the newly added remote (cmsdijetfunctions) and validate:**
+
+```bash
+git remote remove cmsdijetfunctions 2>/dev/null || true
+git remote -v
+```
 
 
 
