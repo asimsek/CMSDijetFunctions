@@ -126,7 +126,7 @@ scramv1 b clean; scramv1 b -j$(nproc --ignore=2)
 ---
 
 > [!TIP]
-> Find the `.config` files in this GitHub repository\n
+> Find the `.config` files in this GitHub repository<br>
 > https://github.com/asimsek/CMSDijetFunctions
 
 
