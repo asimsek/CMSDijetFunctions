@@ -49,7 +49,7 @@ FILES=(
   'interface/RooModDijet*.h'
 )
 
-git restore --source=FETCH_HEAD --worktree -- "${FILES[@]}"
+git restore --source=cmsdijetfunctions/main --worktree -- "${FILES[@]}"
 ```
 
 #### Remove the newly added remote (cmsdijetfunctions) and validate:
