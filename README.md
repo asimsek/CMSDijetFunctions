@@ -213,6 +213,35 @@ sed -i 's/^import rootTools$/from rootTools import RootIterator, Utils/; s/\<roo
 sed -i 's/^import rootTools$/from rootTools import RootIterator, Utils/; s/\<rootTools\.Utils\./Utils./g; s/\<rootTools\.RootIterator\./RootIterator./g' python/WriteDataCard.py
 ```
 
+**Update `python/GetCombine.py`**
+
+```bash
+sed -i 's/AddressOf/addressof/g; s/ProfileLikelihood/Significance/g; s/Asymptotic/AsymptoticLimits/g' python/GetCombine.py
+```
+
+**Update `python/RunCombine.py`**
+
+```bash
+sed -i \
+  -e 's/combine -M Asymptotic -H ProfileLikelihood/combine -M AsymptoticLimits -d/g' \
+  -e 's/combine -M MarkovChainMC -H Asymptotic/combine -M MarkovChainMC -d/g' \
+  -e 's/setPhysicsModelParameterRanges/setParameterRanges/g' \
+  -e 's/ProfileLikelihood/Significance/g' \
+  -e 's/Asymptotic\.mH120/AsymptoticLimits.mH120/g' \
+  -e 's/--minimizerTolerance/--run both --rAbsAcc 1e-5 --rRelAcc 2e-3 --cminDefaultMinimizerTolerance/g' \
+  -e 's/--minimizerStrategy/--cminDefaultMinimizerStrategy/g' \
+  -e "s/'python/'python3/g" \
+  python/RunCombine.py
+```
+
+
+**Update `python/Plot1DLimit.py`**
+
+```bash
+sed -i 's/.iteritems()/.items()/g; s/xsecUL_ProfileLikelihood/xsecUL_Significance/g; s/xsecUL_Asymptotic/xsecUL_AsymptoticLimits/g' python/Plot1DLimit.py
+```
+
+
 **Update `python/rootTools/RootIterator.py`**
 
 ```bash
