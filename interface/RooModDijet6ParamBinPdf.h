@@ -80,7 +80,8 @@ private:
 public:
    double DoEvalPar(double x,const double* p) const
    {
-     double pdf = pow(1-pow(x/p[0],1.0/3.0),p[1])/pow(x/p[0],p[2]+p[3]*log(x/p[0])+p[4]*log(x/p[0])*log(x/p[0])+p[5]*log(x/p[0])*log(x/p[0])*log(x/p[0]));
+     //double pdf = pow(1-pow(x/p[0],1.0/3.0),p[1])/pow(x/p[0],p[2]+p[3]*log(x/p[0])+p[4]*log(x/p[0])*log(x/p[0])+p[5]*log(x/p[0])*log(x/p[0])*log(x/p[0]));
+     double pdf = pow(pow(1-x/p[0],1.0/3.0),p[1])/pow(x/p[0],p[2]+p[3]*log(x/p[0])+p[4]*log(x/p[0])*log(x/p[0])+p[5]*log(x/p[0])*log(x/p[0])*log(x/p[0]));
      double eff = 1.;
      //if (p[6]>0) eff = 0.5 * (1.0 + TMath::Erf((x - p[5])/p[6])) ; // Error function
      if (p[7]>0) eff = 1.0/(1.0 + exp(-2.4*(x - p[6])/p[7])) ; // Sigmoid function
@@ -89,7 +90,8 @@ public:
    
    double DoEval(double x) const
    {
-     double pdf = pow(1-pow(x/pars[0],1.0/3.0),pars[1])/pow(x/pars[0],pars[2]+pars[3]*log(x/pars[0])+pars[4]*log(x/pars[0])*log(x/pars[0])+pars[5]*log(x/pars[0])*log(x/pars[0])*log(x/pars[0]));
+     //double pdf = pow(1-pow(x/pars[0],1.0/3.0),pars[1])/pow(x/pars[0],pars[2]+pars[3]*log(x/pars[0])+pars[4]*log(x/pars[0])*log(x/pars[0])+pars[5]*log(x/pars[0])*log(x/pars[0])*log(x/pars[0]));
+     double pdf = pow(pow(1-x/pars[0],1.0/3.0),pars[1])/pow(x/pars[0],pars[2]+pars[3]*log(x/pars[0])+pars[4]*log(x/pars[0])*log(x/pars[0])+pars[5]*log(x/pars[0])*log(x/pars[0])*log(x/pars[0]));
      double eff = 1.;
      //if (pars[6]>0) eff = 0.5 * (1.0 + TMath::Erf((x - pars[5])/pars[6])); // Error function     
      if (pars[7]>0) eff = 1.0/(1.0 + exp(-2.4*(x - pars[6])/pars[7])); // Sigmoid function

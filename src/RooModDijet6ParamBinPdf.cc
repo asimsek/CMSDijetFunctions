@@ -130,7 +130,7 @@ Double_t RooModDijet6ParamBinPdf::evaluate() const
   params[0] = sqrts;    params[1] = p1;
   params[2] = p2;       params[3] = p3;
   params[4] = p4;       params[5] = p5;
-  params[5] = meff;     params[6] = seff;
+  params[6] = meff;     params[7] = seff;
   func.SetParameters(params);
 
   ROOT::Math::Integrator ig(ROOT::Math::IntegrationOneDim::kADAPTIVE,absTol,relTol);

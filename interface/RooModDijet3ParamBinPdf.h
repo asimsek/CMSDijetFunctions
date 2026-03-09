@@ -77,7 +77,8 @@ private:
 public:
    double DoEvalPar(double x,const double* p) const
    {
-     double pdf = pow(1-pow(x/p[0],1.0/3.0),p[1])/pow(x/p[0],p[2]);
+     //double pdf = pow(1-pow(x/p[0],1.0/3.0),p[1])/pow(x/p[0],p[2]);
+     double pdf = pow(pow(1-x/p[0],1.0/3.0),p[1])/pow(x/p[0],p[2]);
      double eff = 1.;
      //if (p[6]>0) eff = 0.5 * (1.0 + TMath::Erf((x - p[5])/p[6])) ; // Error function
      if (p[4]>0) eff = 1.0/(1.0 + exp(-2.4*(x - p[3])/p[4])) ; // Sigmoid function
@@ -86,7 +87,8 @@ public:
    
    double DoEval(double x) const
    {
-     double pdf = pow(1-pow(x/pars[0],1.0/3.0),pars[1])/pow(x/pars[0],pars[2]);
+     //double pdf = pow(1-pow(x/pars[0],1.0/3.0),pars[1])/pow(x/pars[0],pars[2]);
+     double pdf = pow(pow(1-x/pars[0],1.0/3.0),pars[1])/pow(x/pars[0],pars[2]);
      double eff = 1.;
      //if (pars[6]>0) eff = 0.5 * (1.0 + TMath::Erf((x - pars[5])/pars[6])); // Error function     
      if (pars[4]>0) eff = 1.0/(1.0 + exp(-2.4*(x - pars[3])/pars[4])); // Sigmoid function
